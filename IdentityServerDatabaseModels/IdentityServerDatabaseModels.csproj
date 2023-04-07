@@ -20,9 +20,9 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFrameworkCore.Scaffolding.Handlebars" Version="6.0.3" />
-    <PackageReference Include="GamingSystem.ApplicationLifeCycle" Version="1.0.69" />
-    <PackageReference Include="GamingSystem.DatabaseUnitOfWorkLibrary" Version="1.0.69" />
-    <PackageReference Include="GamingSystem.DatabaseUnitOfWorkTypesLibrary" Version="1.0.69" />
+    <PackageReference Include="GamingSystem.ApplicationLifeCycle" Version="1.0.70" />
+    <PackageReference Include="GamingSystem.DatabaseUnitOfWorkLibrary" Version="1.0.70" />
+    <PackageReference Include="GamingSystem.DatabaseUnitOfWorkTypesLibrary" Version="1.0.70" />
     <PackageReference Include="GamingSystem.SharedUtilities" Version="1.0.70" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
