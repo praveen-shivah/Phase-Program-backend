@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GamingSystem.ApplicationLifeCycle" Version="1.0.69" />
-    <PackageReference Include="GamingSystem.DatabaseUnitOfWorkTypesLibrary" Version="1.0.69" />
+    <PackageReference Include="GamingSystem.ApplicationLifeCycle" Version="1.0.70" />
+    <PackageReference Include="GamingSystem.DatabaseUnitOfWorkTypesLibrary" Version="1.0.70" />
   </ItemGroup>
 
   <ItemGroup>

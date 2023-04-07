@@ -13,10 +13,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="GamingSystem.APISupport" Version="1.0.69" />
-		<PackageReference Include="GamingSystem.APISupportTypes" Version="1.0.69" />
-		<PackageReference Include="GamingSystem.LoggingLibrary" Version="1.0.69" />
-		<PackageReference Include="GamingSystem.SecurityUtilities" Version="1.0.69" />
+		<PackageReference Include="GamingSystem.APISupport" Version="1.0.70" />
+		<PackageReference Include="GamingSystem.APISupportTypes" Version="1.0.70" />
+		<PackageReference Include="GamingSystem.LoggingLibrary" Version="1.0.70" />
+		<PackageReference Include="GamingSystem.SecurityUtilities" Version="1.0.70" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Authorization.Policy" Version="2.2.0" />
