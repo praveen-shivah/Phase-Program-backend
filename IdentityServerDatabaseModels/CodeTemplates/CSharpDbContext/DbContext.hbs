@@ -1,0 +1,19 @@
+﻿namespace DatabaseContext
+{
+{{> dbimports}}
+
+    public partial class {{class}} : DbContext
+    {
+{{{> dbconstructor}}}
+
+{{{> dbsets}}}
+{{#if entity-type-errors}}
+{{#each entity-type-errors}}
+{{spaces 8}}{{{entity-type-error}}}
+{{/each}}
+
+{{/if}}
+
+{{{on-model-creating}}}
+    }
+}
