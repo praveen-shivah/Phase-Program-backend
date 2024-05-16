@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 [Index(nameof(OrganizationId), Name = "fki_FK_Account_Organization")]
-    public partial class Account : BaseEntity
+    public partial class Account     : BaseEntity
     {
         public Account()
         {

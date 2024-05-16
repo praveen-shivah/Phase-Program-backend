@@ -1,20 +1,22 @@
 ﻿namespace AuthenticationRepository
 {
-    using APISupportTypes;
+   using APISupportTypes;
 
     using AuthenticationDto;
-
     using AuthenticationRepositoryTypes;
 
     using DatabaseContext;
 
     using DatabaseUnitOfWorkTypesLibrary;
-
-    using Microsoft.EntityFrameworkCore;
+    using Services.CreateUser.Interfaces;
+    using Services.CreateUser;
+    using IdentityServerDatabaseModels;
+   using Microsoft.EntityFrameworkCore;
 
     public class AuthenticationRepository : IAuthenticationRepository
     {
         private readonly IAuthenticateUser authenticateUser;
+        private readonly ICreateUser createUser;
 
         private readonly ILogout logout;
 
@@ -26,13 +28,14 @@
 
         private readonly IUpdateAccount updateUser;
 
+
         public AuthenticationRepository(
             IUnitOfWorkFactory<DataContext> unitOfWorkFactory,
             IUnitOfWorkResponseFactory unitOfWorkResponseFactory,
             IAuthenticateUser authenticateUser,
             IRefreshToken refreshToken,
             ILogout logout,
-            IUpdateAccount updateUser)
+            IUpdateAccount updateUser,ICreateUser createUser)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.unitOfWorkResponseFactory = unitOfWorkResponseFactory;
@@ -40,7 +43,10 @@
             this.refreshToken = refreshToken;
             this.logout = logout;
             this.updateUser = updateUser;
+            this.createUser = createUser;
         }
+
+        
 
         async Task<AuthenticationResponse> IAuthenticationRepository.Authenticate(AuthenticationRequest authenticationRequest)
         {
@@ -150,6 +156,32 @@
 
             return authenticationResponse;
         }
+
+         async Task<CreateAccountResoponse> IAuthenticationRepository.CreateAccount(CreateAccountRequest request, string claims)
+        {
+            CreateAccountResoponse? createaccountResponse = null;
+            var uow = this.unitOfWorkFactory.Create(
+                async context =>
+                {
+                    createaccountResponse = await this.createUser.CreateUser(
+                                                   context, request, claims
+                                                   );
+
+                    return this.unitOfWorkResponseFactory.Create(true, UOWResponseTypeEnum.doneOrRollback);
+                });
+            var result = await uow.ExecuteAsync();
+            if (result.WorkItemResultEnum != WorkItemResultEnum.commitSuccessfullyCompleted || createaccountResponse == null)
+            {
+                return new CreateAccountResoponse()
+                {
+                    IsSuccessful = true
+                };
+            }
+
+            return createaccountResponse;
+
+        }
+    
 
         async Task<LogoutResponse> IAuthenticationRepository.Logout(LogoutRequest logoutRequest)
         {

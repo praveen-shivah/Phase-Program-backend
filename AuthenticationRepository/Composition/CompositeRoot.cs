@@ -2,8 +2,6 @@
 {
     using ApplicationLifeCycle;
 
-    using IdentityServerDatabaseModels;
-
     using SimpleInjector;
 
     public class CompositeRoot : CompositeRootBase
@@ -17,6 +15,8 @@
             this.GlobalContainer.RegisterDecorator<IAuthenticateUser, AuthenticateUserRetrieve>(Lifestyle.Transient);
             this.GlobalContainer.RegisterDecorator<IAuthenticateUser, AuthenticateUserClearPreviousRefreshTokens>(Lifestyle.Transient);
             this.GlobalContainer.RegisterDecorator<IAuthenticateUser, AuthenticateUserGenerateJwt>(Lifestyle.Transient);
+
+            this.GlobalContainer.Register<Services.CreateUser.Interfaces.ICreateUser, Services.CreateUser.CreateUserInsertion>(Lifestyle.Transient);
 
             this.GlobalContainer.Register<IRefreshToken, RefreshTokenStart>(Lifestyle.Transient);
             this.GlobalContainer.RegisterDecorator<IRefreshToken, RefreshTokenRetrieveRefreshToken>(Lifestyle.Transient);

@@ -10,11 +10,10 @@
     using AuthenticationDto;
 
     using AuthenticationRepository;
-
+    using AuthenticationRepository.Services.CreateUser;
     using AuthenticationRepositoryTypes;
 
     using CommonServices;
-
     using LoggingLibrary;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
@@ -26,7 +25,7 @@
     [ApiController]
     [Route("auth")]
     [EnableCors("_myAllowSpecificOrigins")]
-    public class AuthenticationController : Controller
+    public class RoleBasedAuthenticationController : Controller
     {
         private readonly IAuthenticationRepository authenticationRepository;
 
@@ -36,7 +35,7 @@
 
         private readonly ISecretKeyRetrieval secretKeyRetrieval;
 
-        public AuthenticationController(
+        public RoleBasedAuthenticationController(
             ILogger logger,
             ISecretKeyRetrieval secretKeyRetrieval,
             IDateTimeService dateTimeService,
@@ -135,7 +134,6 @@
                     RefreshTokenResponseDto = null,
                     ResponseTypeEnum = result.ResponseType,
                     ErrorMessage = result.ErrorMessage
-
                 });
         }
 
@@ -290,6 +288,58 @@
             return this.Ok(acctResponse);
         }
 
+        [AllowAnonymousPolicy]
+        [HttpPost("CreateAccount")]
+        public async Task<ActionResult<BaseResponseDto>> CreateAccount(CreateAccountRequest request)
+        {
+            this.logger.Debug(LogClass.General, "Create User");
+            var claims = "";
+            var jwtSecurityToken = (JwtSecurityToken?)HttpContext.Items["JwtSecurityToken"];
+            if (jwtSecurityToken == null || jwtSecurityToken.Claims == null)
+            {
+                return this.BadRequest("token now found in IS");
+            }
+
+            var roles = jwtSecurityToken.Claims.Where(x => x.Type.Trim().ToLower() == "roles");
+            if(roles.Count() == 1)
+            {
+                var temp = roles.First();
+                if (temp.Value.Trim() == "5150")
+                {
+                    claims = "Roles,3001";
+                }
+                else if(temp.Value.Trim() == "3001")
+                {
+                    claims = "Roles,1984";
+                }
+                else if(temp.Value.Trim() == "1984")
+                {
+                    claims = "Roles,2000";
+                }
+                else
+                {
+                    claims = "Roles,2001";
+                }
+            }
+            
+            
+            if (request == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                var response = await this.authenticationRepository.CreateAccount(request,claims);
+                if (response == null)
+                {
+                    return this.BadRequest();
+                }
+                else
+                {
+                    return Ok(response.IsSuccessful);
+                }
+            }
+        }
         private string ipAddress()
         {
             string? result;
@@ -322,7 +372,6 @@
                 IsEssential = true,
                 Secure = false,
                 SameSite = SameSiteMode.Lax,
-
                 // Domain = "localhost",
                 Expires = expires.AddMinutes(15)
             };
