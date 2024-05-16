@@ -336,7 +336,13 @@
                 }
                 else
                 {
-                    return Ok(response.IsSuccessful);
+                    return Ok(new
+                    {
+                        IsSuccessful = response.IsSuccessful,
+                        ErrorMessage = "User Created",
+                        ResponseTypeEnum = ResponseTypeEnum.success,
+                        HttpStatusCode = HttpStatusCode.OK,
+                    });
                 }
             }
         }

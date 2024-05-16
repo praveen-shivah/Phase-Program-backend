@@ -174,7 +174,8 @@
             {
                 return new CreateAccountResoponse()
                 {
-                    IsSuccessful = true
+                    IsSuccessful = true,
+                    ErrorMessage = result.ErrorMessage
                 };
             }
 
