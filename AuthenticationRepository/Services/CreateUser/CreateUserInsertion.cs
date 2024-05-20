@@ -64,7 +64,7 @@ namespace AuthenticationRepository.Services.CreateUser
 
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

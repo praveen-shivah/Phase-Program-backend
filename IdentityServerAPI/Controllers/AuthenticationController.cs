@@ -293,11 +293,15 @@
         public async Task<ActionResult<BaseResponseDto>> CreateAccount(CreateAccountRequest request)
         {
             this.logger.Debug(LogClass.General, "Create User");
+            if(request.Password == request.ConfirmPassword)
+            {
+
+            
             var claims = "";
             var jwtSecurityToken = (JwtSecurityToken?)HttpContext.Items["JwtSecurityToken"];
             if (jwtSecurityToken == null || jwtSecurityToken.Claims == null)
             {
-                return this.BadRequest("token now found in IS");
+                return this.BadRequest("token not found in IS");
             }
 
             var roles = jwtSecurityToken.Claims.Where(x => x.Type.Trim().ToLower() == "roles");
@@ -345,6 +349,17 @@
                     });
                 }
             }
+            }
+            else
+            {
+                return Ok(new
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Password and Confirm Password doesn't match",
+                    ResponseTypeEnum = ResponseTypeEnum.invalidObjectReturned,
+                    HttpStatusCode = HttpStatusCode.UnprocessableEntity,
+                });
+            }
         }
         private string ipAddress()
         {
@@ -382,7 +397,7 @@
                 Expires = expires.AddMinutes(15)
             };
 
-            this.Response.Cookies.Append(
+            this.Response.Cookies.Append(   
                 "refreshToken",
                 token,
                 cookieOptions);
