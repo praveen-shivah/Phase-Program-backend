@@ -293,6 +293,9 @@
         public async Task<ActionResult<BaseResponseDto>> CreateAccount(CreateAccountRequest request)
         {
             this.logger.Debug(LogClass.General, "Create User");
+            if(ModelState.IsValid)
+            {
+
             if(request.Password == request.ConfirmPassword)
             {
 
@@ -343,19 +346,33 @@
                     return Ok(new
                     {
                         IsSuccessful = response.IsSuccessful,
-                        ErrorMessage = "User Created",
+                        ErrorMessage = "New User Created",
                         ResponseTypeEnum = ResponseTypeEnum.success,
                         HttpStatusCode = HttpStatusCode.OK,
                     });
                 }
             }
+
             }
+
             else
             {
                 return Ok(new
                 {
                     IsSuccessful = false,
                     ErrorMessage = "Password and Confirm Password doesn't match",
+                    ResponseTypeEnum = ResponseTypeEnum.invalidObjectReturned,
+                    HttpStatusCode = HttpStatusCode.UnprocessableEntity,
+                });
+            }
+
+            }
+            else
+            {
+                return Ok(new
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = "Use 13 or less characters with letters, underscore & numbers.",
                     ResponseTypeEnum = ResponseTypeEnum.invalidObjectReturned,
                     HttpStatusCode = HttpStatusCode.UnprocessableEntity,
                 });
